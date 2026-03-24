@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #F4EFE6;
+    --surface: #FFF9F2;
+    --surface-soft: #E9E0D2;
+    --text: #21303A;
+    --text-muted: #5B6B74;
+    --line: #D5C8B8;
+    --accent-primary: #1F6B6B;
+    --accent-warm: #C26B35;
+    --accent-olive: #72834A;
+    --accent-danger: #B34B3E;
+    --accent-info: #3E6F9C;
+  }
+
+  body {
+    @apply bg-[var(--bg)] text-[var(--text)] antialiased font-sans;
+  }
+
+  .prose blockquote {
+    @apply bg-[var(--surface-soft)] border-l-4 border-[var(--accent-warm)] p-4 my-8 rounded-r-xl shadow-sm not-italic;
+  }
+  
+  .prose blockquote p {
+    @apply m-0 text-sm md:text-base;
+  }
+
+  .prose blockquote p:first-of-type::before {
+    content: none;
+  }
+
+  .prose blockquote p:last-of-type::after {
+    content: none;
+  }
+
+  /* Table mobile overflow support */
+  .prose table {
+    @apply block w-full overflow-x-auto whitespace-nowrap md:table md:whitespace-normal;
+  }
+}

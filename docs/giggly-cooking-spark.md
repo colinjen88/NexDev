@@ -49,7 +49,7 @@
 
 ## Phase 0：專案腳手架與內容管道（基礎）
 
-### Task 0.1：初始化 Next.js 專案
+### Task 0.1：初始化 Next.js 專案 ✅
 
 **技術選型**（與 design.md §12.1 一致）：
 - Next.js App Router（開工時鎖定目前穩定主版；以 SSG 為主，內容頁零伺服器成本）
@@ -121,7 +121,7 @@ unified remark-parse remark-gfm remark-rehype rehype-stringify rehype-slug rehyp
 lucide-react
 ```
 
-### Task 0.2：建立設計 Token 系統
+### Task 0.2：建立設計 Token 系統 ✅
 
 在 `src/styles/globals.css` 建立 CSS custom properties，`tailwind.config.ts` 引用這些變數：
 
@@ -146,7 +146,7 @@ lucide-react
 - `Noto Sans TC`（內文）
 - `JetBrains Mono`（程式碼）
 
-### Task 0.3：內容解析管道（關鍵路徑）
+### Task 0.3：內容解析管道（關鍵路徑） ✅
 
 用 `unified` + `remark-parse` 在 build time 解析三份 Markdown：
 
@@ -181,7 +181,7 @@ lucide-react
 
 ## Phase 1：前端骨架 — AppShell + 首頁 + 導航
 
-### Task 1.1：Root Layout 與 AppShell
+### Task 1.1：Root Layout 與 AppShell ✅
 
 **三欄佈局**（design.md §6.1）：
 - 左欄 280px（可收合）
@@ -196,7 +196,7 @@ lucide-react
 
 AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當前模式。
 
-### Task 1.2：首頁 / 學習儀表板
+### Task 1.2：首頁 / 學習儀表板 ✅
 
 5 個區塊（design.md §7.1）：
 1. **Hero 區**：標題 + 副標 + 三個主 CTA → 回收 index.jsx HomeView 的佈局
@@ -205,14 +205,14 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 4. **繼續學習區**：讀 localStorage → 上次位置、完成比例、最近 checklist 活動
 5. **推薦閱讀路徑**：新手 / 實作前 / 上線前 三條路線
 
-### Task 1.3：TopCommandBar
+### Task 1.3：TopCommandBar ✅
 
 回收 index.jsx `TopNav` 視覺結構，增加：
 - 模式切換 tabs（Guide / Outline / Checklist）→ 用 `router.push` 非 `useState`
 - 搜尋觸發（Cmd+K）→ Phase 3 實作
 - 內頁 breadcrumb
 
-### Task 1.4：Left Navigation Rail
+### Task 1.4：Left Navigation Rail ✅
 
 根據當前路由動態顯示不同內容：
 - 首頁：模式連結 + 最近活動
@@ -231,11 +231,11 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 ## Phase 2：內容頁 — Guide / Outline / Checklist / Compare
 
-### Task 2.1：指南總覽頁 `/guide`
+### Task 2.1：指南總覽頁 `/guide` ✅
 
 列表頁：文件標題 + 章節列表（含摘要、閱讀時間、已讀狀態）。
 
-### Task 2.2：章節閱讀器 `/guide/[slug]`（關鍵路徑）
+### Task 2.2：章節閱讀器 `/guide/[slug]`（關鍵路徑） ✅
 
 **中欄**：
 - 章節 Header（標題、所屬階段、閱讀時間）
