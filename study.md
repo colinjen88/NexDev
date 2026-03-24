@@ -4,6 +4,16 @@
 
 更新日期：2026-03-24
 
+配套文件：
+
+- [study-quick-outline.md](./study-quick-outline.md)
+- [study-implementation-checklist.md](./study-implementation-checklist.md)
+- [design.md](./design.md)
+- [backend-design.md](./backend-design.md)
+- [api-spec-draft.md](./api-spec-draft.md)
+- [db-schema-draft.md](./db-schema-draft.md)
+- [README.md](./README.md)
+
 ---
 
 ## 這份指南的定位

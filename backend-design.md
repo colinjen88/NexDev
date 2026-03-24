@@ -5,6 +5,7 @@
 - [design.md](./design.md)
 - [api-spec-draft.md](./api-spec-draft.md)
 - [db-schema-draft.md](./db-schema-draft.md)
+- [to-gemini-backend.md](./to-gemini-backend.md)
 - [study.md](./study.md)
 - [study-quick-outline.md](./study-quick-outline.md)
 - [study-implementation-checklist.md](./study-implementation-checklist.md)
