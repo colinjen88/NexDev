@@ -338,19 +338,19 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 ## Phase 4：可及性、響應式、視覺精修
 
-### Task 4.1：鍵盤導航
+### Task 4.1：鍵盤導航 ✅
 - Tab 可達所有互動元素
 - Enter/Space 啟動按鈕和 checkbox
 - Escape 關閉 modal / drawer / 搜尋
 - 焦點環使用 `--accent-primary`
 
-### Task 4.2：ARIA 與語義 HTML
+### Task 4.2：ARIA 與語義 HTML ✅
 - Landmarks：`<nav>`, `<main>`, `<aside>`, `<header>`
 - 模式切換：`role="tablist"` + `role="tab"`
 - 進度環：`role="progressbar"` + `aria-valuenow`
 - 所有 icon button：`aria-label`
 
-### Task 4.3：手機優化
+### Task 4.3：手機優化 ✅
 - 底部欄（回收 index.jsx 原型）
 - Checklist 抽屜（回收 index.jsx 原型）
 - 左導航抽屜 + 遮罩
@@ -358,14 +358,14 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 - 觸控目標 ≥44px
 - `@media (hover: hover)` 隔離 hover 效果
 
-### Task 4.4：排版與視覺精修
+### Task 4.4：排版與視覺精修 ✅
 - 內容最大寬度 820-860px
 - H2/H3 間距 > 段落間距
 - 長文每 3-5 段有節奏變化（callout / table / divider）
 - 卡片圓角 16-20px（主要）/ 12px（次要）
 - 微動效：卡片 stagger 60-90ms、進度條 180-220ms
 
-### Task 4.5：效能
+### Task 4.5：效能 ✅
 - 所有內容頁 SSG 靜態生成
 - 搜尋索引 lazy load（搜尋開啟時才載入）
 - Tailwind purge 未使用樣式

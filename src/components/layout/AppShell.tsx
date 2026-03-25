@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import { GuideSection } from '@/lib/content/types';
 import { PageTOC } from '@/components/guide/PageTOC';
 import { useReadingProgress } from '@/lib/hooks/useReadingProgress';
-import { CheckCircle2, Minimize } from 'lucide-react';
+import { CheckCircle2, Minimize, BookOpen, List, CheckSquare } from 'lucide-react';
 import { SearchPalette } from '@/components/shared/SearchPalette';
 import { ReadingPreferencesPanel } from '@/components/shared/ReadingPreferencesPanel';
 
@@ -42,7 +42,12 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
 
       {/* --- Mobile Top Bar --- */}
       <div className="md:hidden flex items-center justify-between p-4 bg-[var(--surface)] border-b border-[var(--line)] sticky top-0 z-20">
-        <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 text-[var(--accent-primary)]">
+        <button 
+          onClick={() => setSidebarOpen(true)} 
+          className="p-2 -ml-2 text-[var(--accent-primary)] focus-visible:ring-2 focus-visible:ring-inset"
+          aria-label="開啟導航選單"
+          aria-expanded={isSidebarOpen}
+        >
           <Menu className="w-6 h-6" />
         </button>
         <Link href="/" className="font-serif font-bold text-lg text-[var(--text)]">學習型知識工作台</Link>
@@ -69,7 +74,11 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
               學習型知識工作台
             </Link>
             <span className="font-serif font-bold text-lg text-[var(--text)] md:hidden">導航</span>
-            <button onClick={() => setSidebarOpen(false)} className="md:hidden p-2 -mr-2 text-[var(--text-muted)]">
+            <button 
+              onClick={() => setSidebarOpen(false)} 
+              className="md:hidden p-2 -mr-2 text-[var(--text-muted)] focus-visible:ring-2"
+              aria-label="關閉導航選單"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -115,13 +124,14 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
         <header className="hidden md:flex h-14 border-b border-[var(--line)] bg-[var(--surface)] items-center px-6 justify-between shrink-0 sticky top-0 z-10 w-full">
           <div className="text-sm font-medium text-[var(--text-muted)] flex items-center space-x-4">
              {/* Command Palette Trigger Area */}
-             <div 
+             <button 
                className="px-3 py-1.5 bg-[var(--surface-soft)] rounded-md cursor-pointer hover:bg-[var(--line)] transition-colors flex items-center space-x-2"
                onClick={() => setIsSearchOpen(true)}
+               aria-label="搜尋此指南"
              >
                <span>搜尋此指南</span>
                <span className="text-xs bg-[var(--bg)] px-1 rounded border border-[var(--line)]">Cmd+K</span>
-             </div>
+             </button>
           </div>
           <div className="flex items-center space-x-2">
              {readingPreferences.isFocusMode && (
@@ -132,7 +142,13 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
                   <Minimize className="w-3.5 h-3.5" /> 退出專注
                 </button>
              )}
-             <button onClick={toggleUtilityPanel} className={`p-2 hover:bg-[var(--surface-soft)] rounded-full transition-colors ${readingPreferences.isFocusMode ? '' : 'xl:hidden'}`} title="Toggle Utility Panel">
+             <button 
+                onClick={toggleUtilityPanel} 
+                className={`p-2 hover:bg-[var(--surface-soft)] rounded-full transition-colors ${readingPreferences.isFocusMode ? '' : 'xl:hidden'}`} 
+                title="Toggle Utility Panel"
+                aria-label="切換右側工具欄"
+                aria-expanded={isUtilityPanelOpen}
+             >
                 {isUtilityPanelOpen ? <PanelRightClose className="w-5 h-5 text-[var(--accent-primary)]" /> : <PanelRightOpen className="w-5 h-5 text-[var(--text-muted)]" />}
              </button>
           </div>
@@ -148,13 +164,33 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
           {children}
         </div>
 
-        {/* Mobile Bottom Quick Actions (Phase 1, Task 4.3 preparation) */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--surface)] border-t border-[var(--line)] flex justify-around items-center z-20 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-           <Link href="/guide" className="p-3 text-[var(--text-muted)] flex flex-col items-center gap-1 active:text-[var(--accent-primary)]"><div className="w-5 h-5 bg-current opacity-70 rounded-sm"></div><span className="text-[10px]">指南</span></Link>
-           <Link href="/outline" className="p-3 text-[var(--text-muted)] flex flex-col items-center gap-1 active:text-[var(--accent-primary)]"><div className="w-5 h-5 bg-current opacity-70 rounded-full"></div><span className="text-[10px]">大綱</span></Link>
-           <Link href="/checklist" className="p-3 text-[var(--text-muted)] flex flex-col items-center gap-1 active:text-[var(--accent-primary)]"><div className="w-5 h-5 bg-current opacity-70"></div><span className="text-[10px]">清單</span></Link>
-           <button onClick={toggleUtilityPanel} className="p-3 text-[var(--text-muted)] flex flex-col items-center gap-1"><PanelRightOpen className="w-5 h-5 bg-current opacity-70"/><span className="text-[10px]">工具</span></button>
-        </div>
+        {/* Mobile Bottom Quick Actions */}
+        <nav 
+          aria-label="手機快速導航"
+          className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--surface)] border-t border-[var(--line)] flex justify-around items-center z-20 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] pb-safe"
+        >
+           <Link href="/guide" className={`p-3 flex flex-col items-center gap-1 transition-colors ${pathname === '/guide' || isGuideRoute ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'}`} aria-label="指南總覽">
+             <BookOpen className="w-5 h-5" />
+             <span className="text-[10px] font-medium">指南</span>
+           </Link>
+           <Link href="/outline" className={`p-3 flex flex-col items-center gap-1 transition-colors ${pathname === '/outline' ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'}`} aria-label="速讀大綱">
+             <List className="w-5 h-5" />
+             <span className="text-[10px] font-medium">大綱</span>
+           </Link>
+           <Link href="/checklist" className={`p-3 flex flex-col items-center gap-1 transition-colors ${pathname === '/checklist' ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'}`} aria-label="實作清單">
+             <CheckSquare className="w-5 h-5" />
+             <span className="text-[10px] font-medium">清單</span>
+           </Link>
+           <button 
+             onClick={toggleUtilityPanel} 
+             className={`p-3 flex flex-col items-center gap-1 transition-colors ${isUtilityPanelOpen ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'}`}
+             aria-label="右側工具"
+             aria-expanded={isUtilityPanelOpen}
+           >
+             <PanelRightOpen className="w-5 h-5" />
+             <span className="text-[10px] font-medium">工具</span>
+           </button>
+        </nav>
       </main>
 
       {/* --- Right Utility Panel --- */}
@@ -173,7 +209,11 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
         >
           <div className="p-4 flex items-center justify-between border-b border-[var(--line)]">
             <span className="font-semibold text-sm">右側工具 / 目錄</span>
-            <button onClick={() => setUtilityPanelOpen(false)} className="xl:hidden p-2 -mr-2 text-[var(--text-muted)]">
+            <button 
+              onClick={() => setUtilityPanelOpen(false)} 
+              className="xl:hidden p-2 -mr-2 text-[var(--text-muted)] focus-visible:ring-2"
+              aria-label="關閉右側工具欄"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -195,7 +235,13 @@ export function AppShell({ children, guideSections = [] }: { children: React.Rea
              {activeSection && (
                <div className="pt-4 border-t border-[var(--line)] space-y-2">
                  <h4 className="text-xs font-bold text-[var(--text-muted)] tracking-wider uppercase">閱讀進度</h4>
-                 <div className="h-2 w-full bg-[var(--line)] rounded-full overflow-hidden">
+                 <div 
+                   className="h-2 w-full bg-[var(--line)] rounded-full overflow-hidden"
+                   role="progressbar"
+                   aria-valuenow={progresses[activeSection.slug]?.scrollPercent || 0}
+                   aria-valuemin={0}
+                   aria-valuemax={100}
+                 >
                    <div 
                      className="h-full bg-[var(--accent-primary)] transition-all duration-300" 
                      style={{ width: `${progresses[activeSection.slug]?.scrollPercent || 0}%` }}

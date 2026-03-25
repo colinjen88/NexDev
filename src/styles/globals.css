@@ -21,6 +21,11 @@
     @apply bg-[var(--bg)] text-[var(--text)] antialiased font-sans;
   }
 
+  /* Global Accessibility Focus Ring */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-[var(--accent-primary)] ring-offset-2 ring-offset-[var(--bg)] transition-shadow;
+  }
+
   .prose blockquote {
     @apply bg-[var(--surface-soft)] border-l-4 border-[var(--accent-warm)] p-4 my-8 rounded-r-xl shadow-sm not-italic;
   }

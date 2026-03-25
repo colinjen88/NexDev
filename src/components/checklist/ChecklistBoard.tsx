@@ -48,7 +48,13 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-[var(--line)] rounded-full h-2 mb-6 overflow-hidden shadow-inner">
+      <div 
+        className="w-full bg-[var(--line)] rounded-full h-2 mb-6 overflow-hidden shadow-inner"
+        role="progressbar"
+        aria-valuenow={progress}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
         <div 
           className="bg-[var(--accent-primary)] h-2 rounded-full transition-all duration-700 ease-out" 
           style={{ width: `${progress}%` }}
@@ -56,7 +62,7 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
       </div>
 
       {!compact && (
-        <div className="flex gap-2 mb-6 pb-2 overflow-x-auto hide-scrollbar">
+        <div className="flex gap-2 mb-6 pb-2 overflow-x-auto hide-scrollbar" role="group" aria-label="清單狀態過濾器">
           <button 
             onClick={() => setFilter('all')}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${filter === 'all' ? 'bg-[var(--text)] text-[var(--surface)]' : 'bg-[var(--line)] text-[var(--text-muted)] hover:text-[var(--text)]'}`}
@@ -94,9 +100,11 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
 
           return (
             <div key={group.groupCode} className="bg-[var(--bg)] border border-[var(--line)] rounded-xl overflow-hidden">
-              <div 
-                className="p-4 bg-[var(--surface)] flex justify-between items-center cursor-pointer select-none border-b border-[var(--line)]"
+              <button 
+                className="p-4 w-full text-left bg-[var(--surface)] flex justify-between items-center cursor-pointer select-none border-b border-[var(--line)] hover:bg-[var(--surface-soft)] transition-colors focus-visible:ring-2 focus-visible:ring-inset"
                 onClick={() => toggleGroup(group.groupCode)}
+                aria-expanded={expandedGroups[group.groupCode]}
+                aria-controls={`checklist-group-${group.groupCode}`}
               >
                 <div>
                   <h4 className="font-bold text-[var(--text)] flex items-center gap-2">
@@ -105,29 +113,37 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
                   </h4>
                   <div className="text-xs text-[var(--text-muted)] mt-1 flex items-center gap-3">
                     <span>{groupCompleted} / {groupItems.length} 完成</span>
-                    <div className="w-24 bg-[var(--line)] h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-[var(--accent-primary)] h-full transition-all duration-300" style={{ width: `${(groupCompleted/groupItems.length)*100}%` }}></div>
+                    <div 
+                      className="w-24 bg-[var(--line)] h-1.5 rounded-full overflow-hidden"
+                      role="progressbar"
+                      aria-valuenow={groupItems.length === 0 ? 0 : Math.round((groupCompleted/groupItems.length)*100)}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      <div className="bg-[var(--accent-primary)] h-full transition-all duration-300" style={{ width: `${groupItems.length === 0 ? 0 : (groupCompleted/groupItems.length)*100}%` }}></div>
                     </div>
                   </div>
                 </div>
-                <button className="p-1 text-[var(--text-muted)] hover:bg-[var(--line)] rounded">
+                <div className="p-1 text-[var(--text-muted)] group-hover:bg-[var(--line)] rounded">
                   {expandedGroups[group.groupCode] ? <ChevronUp className="w-5 h-5"/> : <ChevronDown className="w-5 h-5"/>}
-                </button>
-              </div>
+                </div>
+              </button>
 
               {expandedGroups[group.groupCode] && (
-                <div className="p-2 space-y-1 bg-white">
+                <div id={`checklist-group-${group.groupCode}`} className="p-2 space-y-1 bg-white">
                   {filteredItems.map(item => {
                     const isChecked = checkedItemIds.includes(item.itemCode);
                     return (
-                      <div 
+                      <button 
                         key={item.itemCode}
-                        className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-300 group ${
+                        className={`flex w-full text-left items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-300 group focus-visible:ring-2 focus-visible:ring-inset ${
                           isChecked 
                             ? 'bg-[var(--surface)] border-transparent opacity-70 hover:opacity-100 grayscale hover:grayscale-0' 
                             : 'bg-white border-transparent hover:border-[var(--line)] hover:bg-[var(--bg)]'
                         }`}
                         onClick={() => toggleItem(item.itemCode)}
+                        role="checkbox"
+                        aria-checked={isChecked}
                       >
                         <div className="relative flex-shrink-0 mt-0.5">
                            <div className={`w-5 h-5 rounded border shadow-sm transition-all duration-300 flex items-center justify-center ${
@@ -153,7 +169,7 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
                             <ExternalLink className="w-4 h-4" />
                           </Link>
                         )}
-                      </div>
+                      </button>
                     );
                   })}
                 </div>

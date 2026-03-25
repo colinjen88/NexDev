@@ -23,7 +23,9 @@ export function ReadingPreferencesPanel() {
             <button
               key={size}
               onClick={() => updateReadingPreference('fontSize', size as any)}
-              className={`flex-1 py-1.5 rounded text-sm border transition-colors ${fontSize === size ? 'bg-[var(--accent-primary)]/10 border-[var(--accent-primary)] text-[var(--accent-primary)] font-bold' : 'border-[var(--line)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'}`}
+              aria-pressed={fontSize === size}
+              aria-label={`設定文字大小為 ${size}`}
+              className={`flex-1 py-1.5 rounded text-sm border transition-colors focus-visible:ring-2 focus-visible:ring-inset ${fontSize === size ? 'bg-[var(--accent-primary)]/10 border-[var(--accent-primary)] text-[var(--accent-primary)] font-bold' : 'border-[var(--line)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'}`}
               style={{ fontSize: `${12 + idx * 2}px` }}
             >
               A
@@ -47,7 +49,9 @@ export function ReadingPreferencesPanel() {
             <button
               key={lh.value}
               onClick={() => updateReadingPreference('lineHeight', lh.value as any)}
-              className={`flex-1 py-1.5 rounded text-xs border transition-colors ${lineHeight === lh.value ? 'bg-[var(--accent-primary)]/10 border-[var(--accent-primary)] text-[var(--accent-primary)] font-bold' : 'border-[var(--line)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'}`}
+              aria-pressed={lineHeight === lh.value}
+              aria-label={`設定行高為 ${lh.label}`}
+              className={`flex-1 py-1.5 rounded text-xs border transition-colors focus-visible:ring-2 focus-visible:ring-inset ${lineHeight === lh.value ? 'bg-[var(--accent-primary)]/10 border-[var(--accent-primary)] text-[var(--accent-primary)] font-bold' : 'border-[var(--line)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'}`}
             >
               {lh.label}
             </button>
@@ -58,7 +62,8 @@ export function ReadingPreferencesPanel() {
       <div className="pt-2">
         <button
           onClick={() => updateReadingPreference('isFocusMode', !isFocusMode)}
-          className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border transition-colors ${isFocusMode ? 'bg-[var(--accent-primary)] text-[var(--bg)] border-transparent' : 'bg-[var(--surface-soft)] border-[var(--line)] text-[var(--text)] hover:border-[var(--accent-primary)]/50'}`}
+          aria-pressed={isFocusMode}
+          className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-inset ${isFocusMode ? 'bg-[var(--accent-primary)] text-[var(--bg)] border-transparent' : 'bg-[var(--surface-soft)] border-[var(--line)] text-[var(--text)] hover:border-[var(--accent-primary)]/50'}`}
         >
           {isFocusMode ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
           <span className="text-sm font-medium">{isFocusMode ? '退出專注模式' : '開啟專注模式'}</span>

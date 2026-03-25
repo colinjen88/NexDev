@@ -56,14 +56,20 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
         className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
-      <div className="fixed left-1/2 top-20 sm:top-32 -translate-x-1/2 w-full max-w-2xl px-4 z-50 animate-in slide-in-from-top-4 fade-in duration-200">
+      <div 
+        className="fixed left-1/2 top-20 sm:top-32 -translate-x-1/2 w-full max-w-2xl px-4 z-50 animate-in slide-in-from-top-4 fade-in duration-200"
+        role="dialog"
+        aria-modal="true"
+        aria-label="全站搜尋"
+      >
         <div className="bg-[var(--surface)] border border-[var(--line)] rounded-xl shadow-2xl flex flex-col overflow-hidden">
           
           <div className="flex items-center px-4 py-3 border-b border-[var(--line)] bg-[var(--bg)]">
             <Search className="w-5 h-5 text-[var(--accent-primary)] mr-3 flex-shrink-0" />
             <input
               ref={inputRef}
-              type="text"
+              type="search"
+              aria-label="搜尋關鍵字"
               className="flex-1 bg-transparent border-none outline-none text-[var(--text)] text-lg placeholder-[var(--text-muted)] p-1"
               placeholder={isLoading ? '載入搜尋索引中...' : '搜尋全站內容... (支援 Cmd+K)'}
               value={query}
@@ -73,13 +79,17 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
             {isLoading && <Loader2 className="w-5 h-5 text-[var(--accent-primary)] animate-spin flex-shrink-0" />}
             <button 
               onClick={onClose}
-              className="p-1 text-[var(--text-muted)] hover:bg-[var(--line)] rounded ml-2"
+              className="p-1 text-[var(--text-muted)] hover:bg-[var(--line)] rounded ml-2 focus-visible:ring-2 focus-visible:ring-inset"
+              aria-label="關閉搜尋"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="max-h-[60vh] overflow-y-auto w-full custom-scrollbar flex-1 bg-[var(--surface)]">
+          <div 
+            className="max-h-[60vh] overflow-y-auto w-full custom-scrollbar flex-1 bg-[var(--surface)]"
+            aria-live="polite"
+          >
             {!query ? (
               <div className="p-8 text-center text-[var(--text-muted)] text-sm">
                 快速尋找章節、重點大綱或實作清單項目
@@ -95,7 +105,7 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                     <button
                       key={res.id}
                       onClick={() => handleResultClick(res.url)}
-                      className="w-full flex items-start gap-4 p-3 rounded-lg hover:bg-[var(--bg)] border border-transparent hover:border-[var(--line)] transition-colors text-left group"
+                      className="w-full flex items-start gap-4 p-3 rounded-lg hover:bg-[var(--bg)] border border-transparent hover:border-[var(--line)] transition-colors text-left group focus-visible:ring-2 focus-visible:ring-inset"
                     >
                       <Icon className="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] mt-0.5 shrink-0" />
                       <div className="flex-1 overflow-hidden">
