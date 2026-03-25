@@ -23,7 +23,7 @@ class EventIngestLog(Base):
 
     __table_args__ = (
         Index('idx_event_ingest_logs_event_name', 'event_name'),
-        Index('idx_event_ingest_logs_occurred_at', 'occurred_at', postgresql_sorting={'occurred_at': 'DESC'}),
+        Index('idx_event_ingest_logs_occurred_at', 'occurred_at'),
         Index('idx_event_ingest_logs_user_id', 'user_id'),
         Index('idx_event_ingest_logs_visitor_session_id', 'visitor_session_id'),
         Index('idx_event_ingest_logs_payload_gin', 'payload', postgresql_using='gin'),

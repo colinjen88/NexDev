@@ -30,11 +30,7 @@ class ReadingProgress(Base):
             name="chk_reading_progress_principal"
         ),
         CheckConstraint("scroll_percent >= 0 AND scroll_percent <= 100", name="chk_reading_progress_scroll_percent"),
-        # uq_reading_progress_user_subject and visitor equivalents are handled via conditional unique indices in alembic ideally,
-        # but here we can define standard ones if we assume either or. Partial indexes are better done via raw DDL or specific Index constructs.
-        Index('uq_reading_progress_user_subject', 'user_id', 'subject_type', 'subject_slug', unique=True, postgresql_where="user_id IS NOT NULL"),
-        Index('uq_reading_progress_visitor_subject', 'visitor_session_id', 'subject_type', 'subject_slug', unique=True, postgresql_where="visitor_session_id IS NOT NULL"),
-        Index('idx_reading_progress_last_read_at', 'last_read_at', postgresql_sorting={'last_read_at': 'DESC'})
+        Index('idx_reading_progress_last_read_at', 'last_read_at'),
     )
 
 # 7.2 checklist_item_states
@@ -55,9 +51,7 @@ class ChecklistItemState(Base):
             "(user_id IS NULL AND visitor_session_id IS NOT NULL)",
             name="chk_checklist_item_states_principal"
         ),
-        Index('uq_checklist_item_states_user_item', 'user_id', 'item_id', unique=True, postgresql_where="user_id IS NOT NULL"),
-        Index('uq_checklist_item_states_visitor_item', 'visitor_session_id', 'item_id', unique=True, postgresql_where="visitor_session_id IS NOT NULL"),
-        Index('idx_checklist_item_states_item_id', 'item_id')
+        Index('idx_checklist_item_states_item_id', 'item_id'),
     )
 
 # 7.3 bookmarks

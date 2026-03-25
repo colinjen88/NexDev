@@ -384,7 +384,7 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 > **可與前端 Phase 2-4 並行開發**，雙方依據 `api-spec-draft.md` 作為契約。
 
-### Task 5.1：後端專案結構
+### Task 5.1：後端專案結構 ✅
 
 ```
 backend/
@@ -406,7 +406,7 @@ backend/
 
 **技術：** Python 3.12+，FastAPI / SQLAlchemy / Pydantic 依開工時穩定版鎖定，Alembic、PostgreSQL 15+（pgcrypto + pg_trgm + citext）、Redis 7+
 
-### Task 5.2：資料庫 Migration
+### Task 5.2：資料庫 Migration ✅
 
 依 `db-schema-draft.md` 順序建立 13 張表：
 1. Extensions + Enums
@@ -418,11 +418,11 @@ backend/
 7. `event_ingest_logs`
 8. `bookmarks` + `daily_metrics`（Phase 2 預留空表）
 
-### Task 5.3：內容匯入腳本
+### Task 5.3：內容匯入腳本 ✅
 
 `seed_content.py`：讀 content/ 下三份 Markdown → 解析 → upsert content tables → 重建 `search_documents`。
 
-### Task 5.4：內容 API（5 個唯讀端點）
+### Task 5.4：內容 API（5 個唯讀端點） ✅
 
 | 方法 | 路徑 | 用途 |
 |---|---|---|
@@ -434,12 +434,12 @@ backend/
 
 Cache headers：`Cache-Control: public, max-age=3600`, `ETag`。
 
-### Task 5.5：系統端點
+### Task 5.5：系統端點 ✅
 
 - `GET /api/v1/system/health` — DB + Redis 連接檢查
 - `GET /api/v1/system/version` — API 版本 + 內容版本 + git SHA
 
-### Task 5.6：Docker Compose
+### Task 5.6：Docker Compose ✅
 
 PostgreSQL 15 + Redis 7 + API server，一鍵 `docker compose up`。
 
