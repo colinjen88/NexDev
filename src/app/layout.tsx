@@ -1,18 +1,13 @@
 import type { Metadata } from 'next';
-import { Noto_Serif_TC, Noto_Sans_TC, JetBrains_Mono } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 import '../styles/globals.css';
 
-const notoSerif = Noto_Serif_TC({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-noto-serif-tc',
-  display: 'swap',
-});
+// Noto Sans TC / Noto Serif TC are defined as CSS variables in globals.css
+// using system font stacks to avoid network dependency during Docker builds.
 
-const notoSans = Noto_Sans_TC({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-noto-sans-tc',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
 });
 
@@ -38,7 +33,7 @@ export default async function RootLayout({
 }) {
   const guideSections = await getGuideSections();
   return (
-    <html lang="zh-TW" className={`${notoSerif.variable} ${notoSans.variable} ${jetbrainsMono.variable}`}>
+    <html lang="zh-TW" className={`${jetbrainsMono.variable}`}>
       <body>
         <AppShellProvider>
           <AppShell guideSections={guideSections}>{children}</AppShell>

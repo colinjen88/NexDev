@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --font-noto-sans-tc: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    --font-noto-serif-tc: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
     --bg: #F4EFE6;
     --surface: #FFF9F2;
     --surface-soft: #E9E0D2;
