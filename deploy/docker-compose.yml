@@ -1,0 +1,76 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: devapp-db
+    restart: always
+    environment:
+      POSTGRES_USER: spark_user
+      POSTGRES_PASSWORD: spark_password
+      POSTGRES_DB: spark_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spark_user -d spark_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: devapp-redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: devapp-frontend
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=https://devapp.seobi.tw
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    # Assign port internally if debugging needed, but Caddy routes by internal IP
+    # ports:
+    #   - "9051:3000"
+    labels:
+      - "caddy=devapp.seobi.tw:80"
+      - "caddy.reverse_proxy={{upstreams 3000}}"
+      - "caddy.reverse_proxy.header_up=X-Forwarded-Proto https"
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: devapp-backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://spark_user:spark_password@db:5432/spark_db
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=production
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # ports:
+    #   - "9052:8000"
+    labels:
+      - "caddy_api=devapp.seobi.tw:80"
+      - "caddy_api.reverse_proxy=/api/* {{upstreams 8000}}"
+      - "caddy_api.reverse_proxy.header_up=X-Forwarded-Proto https"
+    # Seed content task can run on startup or manual
+    # command: sh -c "python -m app.scripts.seed_content && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+volumes:
+  postgres_data:
+  redis_data:
