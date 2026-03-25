@@ -11,12 +11,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
-  display: 'swap',
-});
-
 export const metadata: Metadata = {
   title: '學習型知識工作台',
   description: 'Learning Knowledge Workspace',
