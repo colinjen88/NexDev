@@ -454,7 +454,7 @@ PostgreSQL 15 + Redis 7 + API server，一鍵 `docker compose up`。
 
 ## Phase 6：狀態同步 API + 前後端整合
 
-### Task 6.1：Progress Sync
+### Task 6.1：Progress Sync ✅
 
 - `GET /api/v1/me/progress` — 取得當前 visitor 的所有進度
 - `PUT /api/v1/me/progress` — 批次 upsert
@@ -462,21 +462,21 @@ PostgreSQL 15 + Redis 7 + API server，一鍵 `docker compose up`。
 身分識別（MVP）：`X-Visitor-Key` header，前端首次造訪產生 UUID 存 localStorage。
 Upsert 邏輯：`ON CONFLICT ... DO UPDATE`，只在 incoming `lastReadAt` 較新時更新。
 
-### Task 6.2：Checklist State Sync
+### Task 6.2：Checklist State Sync ✅
 
 - `GET /api/v1/me/checklist` — 取得所有勾選狀態
 - `PUT /api/v1/me/checklist` — 批次 upsert
 
-### Task 6.3：搜尋端點
+### Task 6.3：搜尋端點 ✅
 
 `GET /api/v1/search?q=...&types=...&limit=...`
 MVP 先用 `pg_trgm`（字元 trigram，對中文可用但品質有限）。
 
-### Task 6.4：事件接收端點
+### Task 6.4：事件接收端點 ✅
 
 `POST /api/v1/events/batch`（最多 50 筆），快速寫入 `event_ingest_logs`。
 
-### Task 6.5：前端 SyncManager
+### Task 6.5：前端 SyncManager ✅
 
 ```typescript
 // src/lib/data/sync-manager.ts
@@ -500,7 +500,7 @@ class SyncManager {
 
 後端不可用時自動 fallback 到 local-only。
 
-### Task 6.6：OpenAPI Client 生成
+### Task 6.6：OpenAPI Client 生成 ✅
 
 用 `openapi-typescript-codegen` 或 `orval` 從 FastAPI OpenAPI spec 生成 TypeScript client。
 

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.routers import content, system
+from app.routers import progress, checklist_state, search, events
 
 
 @asynccontextmanager
@@ -30,5 +31,14 @@ app.add_middleware(
 )
 
 # ── Routers ──────────────────────────────────────────────────────
+# Content (read-only)
 app.include_router(content.router)
+# System
 app.include_router(system.router)
+# State sync (requires X-Visitor-Key)
+app.include_router(progress.router)
+app.include_router(checklist_state.router)
+# Search
+app.include_router(search.router)
+# Events
+app.include_router(events.router)
