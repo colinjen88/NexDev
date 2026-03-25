@@ -250,7 +250,7 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 **回收 index.jsx**：ArticleContent 的編輯式視覺結構（編號標題、callout 樣式）、右側 TOC 結構。
 
-### Task 2.3：速讀大綱頁 `/outline`
+### Task 2.3：速讀大綱頁 `/outline` ✅
 
 - 頂部流程條（所有節次進度指示器）
 - 每節一張卡片：標題 + 摘要 + 3-5 個重點 + 展開/收合 + 跳到完整版連結
@@ -258,7 +258,7 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 **回收 index.jsx**：summary 模式的左邊框卡片設計。
 
-### Task 2.4：互動清單頁 `/checklist`（關鍵路徑）
+### Task 2.4：互動清單頁 `/checklist`（關鍵路徑） ✅
 
 **頂部摘要**：總完成度、已完成/未完成數、最近更新群組
 
@@ -277,7 +277,7 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 **回收 index.jsx**：ChecklistBoard 的 checkbox 樣式和進度條。
 
-### Task 2.5：比較模式 `/compare`
+### Task 2.5：比較模式 `/compare` ✅
 
 - 左窗格：可切換 Guide section / Outline section
 - 右窗格：對應 checklist 群組
@@ -299,14 +299,14 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 
 ## Phase 3：搜尋、進度追蹤、閱讀偏好
 
-### Task 3.1：搜尋 / Command Palette
+### Task 3.1：搜尋 / Command Palette ✅
 
 - Cmd+K / Ctrl+K 開啟
 - 搜尋範圍：章節標題、摘要、checklist 項目、outline 重點
 - 結果依類型分組
 - **實作**：build time 建立 JSON 搜尋索引，client-side 用 `flexsearch` 或 `minisearch`，但要先驗證中文搜尋品質；若預設 tokenizer 不夠，改採字元 n-gram 預處理或提前接後端搜尋 API
 
-### Task 3.2：閱讀進度系統
+### Task 3.2：閱讀進度系統 ✅
 
 `useReadingProgress` hook：
 - 資料結構（對齊 api-spec-draft.md）：
@@ -320,11 +320,11 @@ AppShell 用 React Context 管理 `isSidebarOpen`、`isUtilityPanelOpen`、當�
 - localStorage key `reading-progress`
 - 餵入：首頁繼續學習、左導航已讀標記、StageRoadmap 狀態、Guide 總覽頁
 
-### Task 3.3：閱讀偏好
+### Task 3.3：閱讀偏好 ✅
 
 字級（14/16/18/20px）、行高（1.6/1.75/1.9/2.0）、專注模式（收合左右欄）。localStorage key `reading-preferences`。
 
-### Task 3.4：Data Adapter Layer
+### Task 3.4：Data Adapter Layer ✅
 
 建立 View Model 類型對齊 API 規格（`GuideSectionVM`, `OutlineSectionVM`, `ChecklistGroupVM`, `ReadingProgressVM`, `ChecklistStateVM`），確保未來接後端只需換資料源，不改元件。
 

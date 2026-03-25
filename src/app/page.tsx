@@ -14,7 +14,7 @@ export default async function Home() {
         {/* Left Column: Hero & Modes (Span 8) */}
         <div className="lg:col-span-8 flex flex-col gap-8 lg:gap-12">
           <HeroSection />
-          <ContinueLearning />
+          <ContinueLearning sections={guideSections} />
           <ModeCards />
         </div>
 

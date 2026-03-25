@@ -41,4 +41,15 @@
   .prose table {
     @apply block w-full overflow-x-auto whitespace-nowrap md:table md:whitespace-normal;
   }
+
+  /* Reading Preferences Overrides */
+  .dynamic-reading-wrapper[data-font="14px"] .prose { font-size: 14px !important; }
+  .dynamic-reading-wrapper[data-font="16px"] .prose { font-size: 16px !important; }
+  .dynamic-reading-wrapper[data-font="18px"] .prose { font-size: 18px !important; }
+  .dynamic-reading-wrapper[data-font="20px"] .prose { font-size: 20px !important; }
+  
+  .dynamic-reading-wrapper[data-line="1.6"] .prose { line-height: 1.6 !important; }
+  .dynamic-reading-wrapper[data-line="1.75"] .prose { line-height: 1.75 !important; }
+  .dynamic-reading-wrapper[data-line="1.9"] .prose { line-height: 1.9 !important; }
+  .dynamic-reading-wrapper[data-line="2.0"] .prose { line-height: 2 !important; }
 }

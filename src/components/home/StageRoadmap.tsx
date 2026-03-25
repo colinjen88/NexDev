@@ -1,9 +1,13 @@
+'use client';
+
 import React from 'react';
 import { Map, CheckCircle2 } from 'lucide-react';
 import { GuideSection } from '@/lib/content/types';
 import Link from 'next/link';
+import { useReadingProgress } from '@/lib/hooks/useReadingProgress';
 
 export function StageRoadmap({ sections }: { sections: GuideSection[] }) {
+  const { progresses, isLoaded } = useReadingProgress();
   // Extract phase 0-8 sections
   const phaseSections = sections.filter(s => s.phaseCode >= 0);
   
@@ -18,8 +22,12 @@ export function StageRoadmap({ sections }: { sections: GuideSection[] }) {
       
       <div className="relative border-l-2 border-[var(--line)] ml-4 space-y-8 pb-4">
         {sortedSections.map((node) => {
-          // Mock status based on phaseCode to demonstrate UI
-          const status = node.phaseCode < 3 ? 'completed' : node.phaseCode === 3 ? 'in-progress' : 'pending';
+          let status = 'pending';
+          if (isLoaded) {
+            const p = progresses[node.slug];
+            if (p?.isCompleted) status = 'completed';
+            else if (p?.scrollPercent > 0) status = 'in-progress';
+          }
 
           return (
             <div key={node.slug} className="relative pl-8 group">

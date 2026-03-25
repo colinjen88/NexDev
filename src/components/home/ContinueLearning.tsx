@@ -1,12 +1,24 @@
 'use client';
 
 import React from 'react';
-import { Zap, BookDashed, ChevronRight } from 'lucide-react';
+import { Zap, BookDashed, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useReadingProgress } from '@/lib/hooks/useReadingProgress';
+import { GuideSection } from '@/lib/content/types';
 
-export function ContinueLearning() {
+export function ContinueLearning({ sections }: { sections: GuideSection[] }) {
   const router = useRouter();
-  const progress = 33; // Mock
+  const { getRecentProgress, isLoaded } = useReadingProgress();
+  
+  if (!isLoaded) return <div className="animate-pulse h-48 bg-[var(--surface-soft)] rounded-2xl w-full"></div>;
+
+  const recent = getRecentProgress();
+  
+  // If no reading progress, we show the first section as recommendation
+  const targetSection = recent ? sections.find(s => s.slug === recent.subjectSlug) : sections[0];
+  if (!targetSection) return null;
+  
+  const progress = recent?.scrollPercent || 0;
   
   return (
     <section>
@@ -16,7 +28,7 @@ export function ContinueLearning() {
       </div>
       <div 
         className="relative overflow-hidden bg-[var(--surface)] border border-[var(--line)] rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer group hover:border-[var(--accent-primary)]"
-        onClick={() => router.push('/guide')}
+        onClick={() => router.push(`/guide/${targetSection.slug}`)}
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--accent-primary)]/5 to-transparent rounded-full -translate-y-1/2 translate-x-1/3 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
@@ -29,10 +41,18 @@ export function ContinueLearning() {
             <span className="absolute text-sm sm:text-base font-bold text-[var(--accent-primary)]">{progress}%</span>
           </div>
           <div>
-            <div className="text-xs sm:text-sm text-[var(--accent-primary)] font-bold mb-1.5 tracking-widest uppercase">Chapter 3</div>
-            <h3 className="text-xl sm:text-2xl font-serif text-[var(--text)] group-hover:text-[var(--accent-primary)] transition-colors mb-2">技術架構選型：為規模化打底</h3>
+            <div className="text-xs sm:text-sm text-[var(--accent-primary)] font-bold mb-1.5 tracking-widest uppercase">
+              Chapter {targetSection.sortOrder.toString().padStart(2, '0')}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-serif text-[var(--text)] group-hover:text-[var(--accent-primary)] transition-colors mb-2">
+              {targetSection.title}
+            </h3>
             <div className="flex items-center gap-3 text-sm text-[var(--text-muted)]">
-              <span className="flex items-center gap-1"><BookDashed className="w-4 h-4"/> 閱讀中</span>
+              {recent?.isCompleted ? (
+                <span className="flex items-center gap-1 text-[var(--accent-primary)] font-bold"><CheckCircle2 className="w-4 h-4"/> 已完成</span>
+              ) : (
+                <span className="flex items-center gap-1"><BookDashed className="w-4 h-4"/> {recent ? '閱讀中' : '尚未開始'}</span>
+              )}
             </div>
           </div>
         </div>
