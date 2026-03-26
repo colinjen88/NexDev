@@ -46,6 +46,9 @@ services:
       - "caddy=devapp.seobi.tw:80"
       - "caddy.reverse_proxy={{upstreams 3000}}"
       - "caddy.reverse_proxy.header_up=X-Forwarded-Proto https"
+    networks:
+      - default
+      - web-proxy
 
   backend:
     build:
@@ -70,9 +73,16 @@ services:
       - "caddy_api.reverse_proxy.header_up=X-Forwarded-Proto https"
     volumes:
       - ../content:/content
+    networks:
+      - default
+      - web-proxy
     # Seed content task can run on startup or manual
     # command: sh -c "python -m app.scripts.seed_content && uvicorn app.main:app --host 0.0.0.0 --port 8000"
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  web-proxy:
+    external: true
