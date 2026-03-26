@@ -139,7 +139,7 @@ export async function parseGuideSections(): Promise<GuideSection[]> {
     
     // Extract sort order/number from the title if available
     const numMatch = sec.title.match(/^(\d+)\./);
-    const itemSortOrder = numMatch ? parseInt(numMatch[1], 10) : sortOrder;
+    const itemSortOrder = numMatch ? parseInt(numMatch[1], 10) : i + 1;
 
     // Extract Phase Code roughly
     const phaseMatch = sec.title.match(/第 (\d+) 階段/);

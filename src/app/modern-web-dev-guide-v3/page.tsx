@@ -6,8 +6,7 @@ import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
-import remarkMermaid from 'remark-mermaidjs';
-import { Book, Sparkles, Files } from 'lucide-react';
+import { Sparkles, Files } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 

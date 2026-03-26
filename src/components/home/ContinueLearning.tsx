@@ -4,7 +4,7 @@ import React from 'react';
 import { Zap, BookDashed, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useReadingProgress } from '@/lib/hooks/useReadingProgress';
-import { GuideSection } from '@/lib/content/types';
+import { GuideSection, AiGuideSection } from '@/lib/content/types';
 
 export function ContinueLearning({ 
   sections, 
@@ -43,7 +43,9 @@ export function ContinueLearning({
      themeColorClass = 'text-[var(--accent-primary)]';
      themeBgClass = 'text-[var(--accent-primary)]';
   }
-  
+
+  const progress = recent?.scrollPercent || 0;
+
   return (
     <section>
       <div className="flex items-center gap-2 mb-4">
