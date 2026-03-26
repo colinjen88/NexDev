@@ -40,6 +40,7 @@ const GUIDE_TO_AI_CROSS_REF_MAP: Record<string, string[]> = {
   "performance-seo": ["seo-performance"],
   "ci-cd-ops": ["deployment"],
   "mindset": ["engineering-fundamentals"],
+  "problem-definition": ["mvp-overview"],
 };
 
 const OUTLINE_SLUG_MAP: Record<string, string> = {
@@ -326,6 +327,7 @@ const AI_GUIDE_CROSS_REF_MAP: Record<string, string[]> = {
   "seo-performance": ["performance-seo"],
   "deployment": ["ci-cd-ops"],
   "engineering-fundamentals": ["mindset"],
+  "mvp-overview": ["problem-definition"],
 };
 
 const AI_GUIDE_CHAPTER_NUM_MAP: Record<string, number> = {
@@ -430,5 +432,77 @@ export async function parseAiGuideSections(): Promise<AiGuideSection[]> {
   }
 
   return aiGuideSections;
+}
+
+/** Parses ai-guide.md for ⚡ lightning bolt summaries to use in Outline view */
+export async function parseAiOutlineSections(): Promise<OutlineSection[]> {
+  const filePath = path.join(process.cwd(), 'content', 'ai-guide.md');
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const tree = getProcessor().parse(content);
+  
+  const sections: any[] = [];
+  let currentSection: any = null;
+
+  tree.children.forEach((node: any) => {
+    if (node.type === 'heading' && node.depth === 2) {
+      const title = normalizeTitle(toString(node));
+      if (AI_GUIDE_SLUG_MAP[title]) {
+        currentSection = { title, nodes: [] };
+        sections.push(currentSection);
+      } else {
+        currentSection = null;
+      }
+    } else if (currentSection) {
+      currentSection.nodes.push(node);
+    }
+  });
+
+  const outlineSections: OutlineSection[] = [];
+  
+  for (const sec of sections) {
+    const sectionSlug = AI_GUIDE_SLUG_MAP[sec.title];
+    
+    // Find the "⚡ 精煉易懂" H3
+    let summaryNodeIdx = -1;
+    for (let i = 0; i < sec.nodes.length; i++) {
+        const n = sec.nodes[i];
+        if (n.type === 'heading' && n.depth === 3 && toString(n).includes('⚡')) {
+            summaryNodeIdx = i;
+            break;
+        }
+    }
+
+    if (summaryNodeIdx !== -1) {
+        // Take the content after the ⚡ H3 until next H3 or end
+        const summaryNodes = [];
+        for (let j = summaryNodeIdx + 1; j < sec.nodes.length; j++) {
+            const n = sec.nodes[j];
+            if (n.type === 'heading' && n.depth <= 3) break;
+            summaryNodes.push(n);
+        }
+        
+        const summaryMd = summaryNodes.map(n => toString(n)).join('\n');
+        
+        // Find highlights from lists in this summary
+        const highlights: string[] = [];
+        visit({ type: 'root', children: summaryNodes }, 'listItem', (node: any) => {
+            highlights.push(toString(node).trim());
+        });
+
+        // Use first paragraph as summary
+        const firstP = summaryNodes.find(n => n.type === 'paragraph');
+        const summary = firstP ? toString(firstP) : '';
+
+        outlineSections.push({
+            sectionSlug,
+            title: sec.title.replace(/^第\s*\w+\s*[章階段]：\s*/, ''),
+            summary,
+            highlights: highlights.slice(0, 5), // Limit to top 5
+            relatedGuideSectionSlugs: [sectionSlug]
+        });
+    }
+  }
+
+  return outlineSections;
 }
 

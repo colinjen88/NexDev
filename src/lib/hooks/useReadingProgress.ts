@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 export interface ReadingProgressRecord {
-  subjectType: 'guideSection' | 'outlineSection';
+  subjectType: 'guideSection' | 'outlineSection' | 'aiGuideSection';
   subjectSlug: string;
   scrollPercent: number;
   isCompleted: boolean;
@@ -56,7 +56,7 @@ export function useReadingProgress() {
 }
 
 // Helper hook for components to automatically track scroll inside a specific section
-export function useScrollTracker(subjectSlug: string, subjectType: 'guideSection' | 'outlineSection') {
+export function useScrollTracker(subjectSlug: string, subjectType: 'guideSection' | 'outlineSection' | 'aiGuideSection') {
   const [percent, setPercent] = useState(0);
   const { saveProgress, getProgressBySlug } = useReadingProgress();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);

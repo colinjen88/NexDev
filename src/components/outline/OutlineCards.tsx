@@ -7,9 +7,10 @@ import Link from 'next/link';
 
 interface OutlineCardsProps {
   sections: OutlineSection[];
+  isAiGuide?: boolean;
 }
 
-export function OutlineCards({ sections }: OutlineCardsProps) {
+export function OutlineCards({ sections, isAiGuide = false }: OutlineCardsProps) {
   // Option to hold state per card (expanded/collapsed).
   const [expanded, setExpanded] = useState<Record<string, boolean>>(
     sections.reduce((acc, s) => ({ ...acc, [s.sectionSlug]: true }), {})
@@ -27,18 +28,18 @@ export function OutlineCards({ sections }: OutlineCardsProps) {
         return (
           <div 
             key={section.sectionSlug} 
-            className="group bg-[var(--surface)] border-l-4 border-l-[var(--accent-warm)] border-[var(--line)] border p-6 md:p-8 rounded-r-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
+            className={`group bg-[var(--surface)] border-l-4 ${isAiGuide ? 'border-l-[var(--accent-info)]' : 'border-l-[var(--accent-warm)]'} border-[var(--line)] border p-6 md:p-8 rounded-r-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-1`}
             id={`outline-${section.sectionSlug}`}
           >
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-serif text-[var(--text)] font-bold flex items-center gap-3">
-                  <span className="text-[var(--accent-warm)] opacity-50 text-sm whitespace-nowrap">Point {String(idx + 1).padStart(2, '0')}</span>
+                  <span className={`${isAiGuide ? 'text-[var(--accent-info)]' : 'text-[var(--accent-warm)]'} opacity-50 text-sm whitespace-nowrap`}>{isAiGuide ? 'AI Point' : 'Point'} {String(idx + (isAiGuide ? 0 : 1)).padStart(2, '0')}</span>
                   {section.title}
                 </h3>
                 <div className="flex items-center gap-2">
                   <Link 
-                    href={`/guide/${section.sectionSlug}`} 
-                    className="hidden md:flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--accent-primary)] font-medium p-1 transition-colors focus-visible:ring-2 focus-visible:ring-inset rounded"
+                    href={isAiGuide ? `/ai-guide/${section.sectionSlug}` : `/guide/${section.sectionSlug}`} 
+                    className={`hidden md:flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:${isAiGuide ? 'text-[var(--accent-info)]' : 'text-[var(--accent-primary)]'} font-medium p-1 transition-colors focus-visible:ring-2 focus-visible:ring-inset rounded`}
                     title="閱讀完整指南"
                     aria-label={`閱讀完整指南：${section.title}`}
                   >
@@ -71,8 +72,8 @@ export function OutlineCards({ sections }: OutlineCardsProps) {
                 
                 <div className="mt-6 md:hidden">
                    <Link 
-                    href={`/guide/${section.sectionSlug}`} 
-                    className="flex justify-center flex-1 items-center gap-2 text-sm text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-4 py-2 rounded-lg font-bold hover:bg-[var(--accent-primary)] hover:text-white transition-colors"
+                    href={isAiGuide ? `/ai-guide/${section.sectionSlug}` : `/guide/${section.sectionSlug}`} 
+                    className={`flex justify-center flex-1 items-center gap-2 text-sm ${isAiGuide ? 'text-[var(--accent-info)] bg-[var(--accent-info)]/10 hover:bg-[var(--accent-info)]' : 'text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 hover:bg-[var(--accent-primary)]'} px-4 py-2 rounded-lg font-bold hover:text-white transition-colors`}
                   >
                     <BookOpen className="w-4 h-4" /> 跳到完整版
                   </Link>

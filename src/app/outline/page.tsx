@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import React from 'react';
-import { getOutlineSections } from '@/lib/content/outline-loader';
+import { getOutlineSections, getAiOutlineSections } from '@/lib/content/outline-loader';
 import { OutlineCards } from '@/components/outline/OutlineCards';
 import { OutlineFlowBar } from '@/components/outline/OutlineFlowBar';
 import { Zap } from 'lucide-react';
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 export default async function OutlinePage() {
   const outlineSections = await getOutlineSections();
+  const aiOutlineSections = await getAiOutlineSections();
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8">
@@ -25,8 +26,22 @@ export default async function OutlinePage() {
 
       <OutlineFlowBar sections={outlineSections} />
       
-      <div className="mt-8 px-4 md:px-0">
-        <OutlineCards sections={outlineSections} />
+      <div className="mt-12 px-4 md:px-0 space-y-12">
+        <div>
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[var(--accent-primary)]">
+            <span className="w-1.5 h-6 bg-[var(--accent-primary)] rounded-full"></span>
+            標準開發流程大綱
+          </h3>
+          <OutlineCards sections={outlineSections} />
+        </div>
+
+        <div>
+           <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[var(--accent-info)]">
+            <span className="w-1.5 h-6 bg-[var(--accent-info)] rounded-full"></span>
+            AI 驅動開發大綱
+          </h3>
+          <OutlineCards sections={aiOutlineSections} isAiGuide={true} />
+        </div>
       </div>
     </div>
   );

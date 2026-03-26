@@ -4,9 +4,11 @@ import { ContinueLearning } from '@/components/home/ContinueLearning';
 import { ModeCards } from '@/components/home/ModeCards';
 import { StageRoadmap } from '@/components/home/StageRoadmap';
 import { getGuideSections } from '@/lib/content/guide-loader';
+import { getAiGuideSections } from '@/lib/content/ai-guide-loader';
 
 export default async function Home() {
   const guideSections = await getGuideSections();
+  const aiGuideSections = await getAiGuideSections();
 
   return (
     <div className="max-w-6xl mx-auto py-8 sm:py-12 animate-in fade-in duration-500">
@@ -14,7 +16,7 @@ export default async function Home() {
         {/* Left Column: Hero & Modes (Span 8) */}
         <div className="lg:col-span-8 flex flex-col gap-8 lg:gap-12">
           <HeroSection />
-          <ContinueLearning sections={guideSections} />
+          <ContinueLearning sections={guideSections} aiSections={aiGuideSections} />
           <ModeCards />
         </div>
 
