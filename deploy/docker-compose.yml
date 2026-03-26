@@ -68,6 +68,8 @@ services:
       - "caddy_api=devapp.seobi.tw:80"
       - "caddy_api.reverse_proxy=/api/* {{upstreams 8000}}"
       - "caddy_api.reverse_proxy.header_up=X-Forwarded-Proto https"
+    volumes:
+      - ../content:/content
     # Seed content task can run on startup or manual
     # command: sh -c "python -m app.scripts.seed_content && uvicorn app.main:app --host 0.0.0.0 --port 8000"
 
