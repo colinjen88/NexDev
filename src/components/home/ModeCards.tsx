@@ -5,7 +5,7 @@ import Link from 'next/link';
 export function ModeCards() {
   const modes = [
     { icon: BookOpen, title: '完整指南', desc: '深度閱讀，掌握底層邏輯與系統思考。', href: '/guide', color: 'text-[var(--accent-primary)]', bg: 'bg-[var(--accent-primary)]/10' },
-    { icon: Sparkles, title: 'AI 開發指南', desc: '用 AI 加速開發，掌握 Prompt、工具鏈與模型選型。', href: '/ai-guide', color: 'text-[var(--accent-info)]', bg: 'bg-[var(--accent-info)]/10' },
+    { icon: Sparkles, title: '現代 Web Dev 指南 v3', desc: '從標準流程到 Vibe Coding，全面掌握 AI 工具鏈、指令工程與模型選型。', href: '/ai-guide', color: 'text-[var(--accent-info)]', bg: 'bg-[var(--accent-info)]/10' },
     { icon: Zap, title: '速讀大綱', desc: '3 分鐘抓取重點，適合碎片時間複習。', href: '/outline', color: 'text-[var(--accent-warm)]', bg: 'bg-[var(--accent-warm)]/10' },
     { icon: LayoutPanelLeft, title: '對照實作', desc: '左看教學右打勾，最高效的實作體驗。', href: '/checklist', color: 'text-[var(--text)]', bg: 'bg-[var(--text)]/10' }
   ];

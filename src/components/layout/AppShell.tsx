@@ -148,7 +148,10 @@ export function AppShell({ children, guideSections = [], aiGuideSections = [] }:
                 <Link href="/" className="block p-2 rounded-lg hover:bg-[var(--surface-soft)] text-sm font-medium transition-colors" key="nav-home">首頁學習儀表板</Link>
                 <Link href="/guide" className="block p-2 rounded-lg hover:bg-[var(--surface-soft)] text-sm font-medium transition-colors" key="nav-guide">指南總覽</Link>
                 <Link href="/ai-guide" className="block p-2 rounded-lg hover:bg-[var(--surface-soft)] text-sm font-medium transition-colors" key="nav-ai-guide">
-                  <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-[var(--accent-info)]" /> AI 開發指南</span>
+                  <span className="flex items-center gap-2 font-bold text-[var(--accent-info)]"><Sparkles className="w-4 h-4" /> 現代 Web 開發指南 v3</span>
+                </Link>
+                <Link href="/modern-web-dev-guide-v3" className="block p-2 ml-6 rounded-lg hover:bg-[var(--surface-soft)] text-xs font-medium text-[var(--text-muted)] transition-colors" key="nav-ai-full">
+                  <span>↳ 完整單頁版</span>
                 </Link>
                 <Link href="/outline" className="block p-2 rounded-lg hover:bg-[var(--surface-soft)] text-sm font-medium transition-colors" key="nav-outline">速讀大綱</Link>
                 <Link href="/checklist" className="block p-2 rounded-lg hover:bg-[var(--surface-soft)] text-sm font-medium transition-colors" key="nav-checklist">互動清單</Link>
