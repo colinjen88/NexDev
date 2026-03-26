@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.routers import content, system
 from app.routers import progress, checklist_state, search, events
+from app.config import settings
 
 
 @asynccontextmanager
@@ -21,10 +22,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS MVP setup
+# CORS setup — origins controlled via CORS_ORIGINS env var
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Should be tightened in production
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
-import { JetBrains_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import '../styles/globals.css';
 
 // Noto Sans TC / Noto Serif TC are defined as CSS variables in globals.css
 // using system font stacks to avoid network dependency during Docker builds.
+// JetBrains Mono is self-hosted in public/fonts/ to avoid network dependency at build time.
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
+const jetbrainsMono = localFont({
+  src: '../../public/fonts/JetBrainsMono.woff2',
   variable: '--font-jetbrains-mono',
   display: 'swap',
 });
