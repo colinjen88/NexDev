@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
 import React from 'react';
 import { getGuideSections } from '@/lib/content/guide-loader';
 import Link from 'next/link';
 import { BookDashed, CheckCircle } from 'lucide-react';
 import { GuideList } from '@/components/guide/GuideList';
+
+export const metadata: Metadata = {
+  title: '標準開發指南 | 學習型知識工作台',
+  description: '從 MVP 到規模化的觀念與實務，涵蓋完整軟體工程生命週期的 17 個章節。',
+};
 
 export default async function GuideOverview() {
   const sections = await getGuideSections();

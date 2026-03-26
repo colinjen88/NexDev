@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(cd:*)",
-      "WebFetch(domain:fonts.googleapis.com)",
-      "Bash(curl:*)"
-    ]
-  }
-}

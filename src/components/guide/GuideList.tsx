@@ -9,7 +9,27 @@ import { useReadingProgress } from '@/lib/hooks/useReadingProgress';
 export function GuideList({ sections }: { sections: GuideSection[] }) {
   const { progresses, isLoaded } = useReadingProgress();
 
+  const completedCount = isLoaded
+    ? sections.filter(s => progresses[s.slug]?.isCompleted).length
+    : 0;
+  const progressPct = sections.length > 0 ? (completedCount / sections.length) * 100 : 0;
+
   return (
+    <div>
+      {isLoaded && (
+        <div className="mb-8 p-4 bg-[var(--surface)] border border-[var(--line)] rounded-xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-[var(--text)]">閱讀進度</span>
+            <span className="text-sm text-[var(--text-muted)]">{completedCount} / {sections.length} 章節</span>
+          </div>
+          <div className="h-1.5 bg-[var(--line)] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[var(--accent-primary)] rounded-full transition-all duration-700"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+        </div>
+      )}
     <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-6">
       {sections.map(section => {
         const p = progresses[section.slug];
@@ -44,6 +64,7 @@ export function GuideList({ sections }: { sections: GuideSection[] }) {
           </Link>
         );
       })}
+    </div>
     </div>
   );
 }

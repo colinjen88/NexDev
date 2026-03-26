@@ -130,7 +130,7 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
               </button>
 
               {expandedGroups[group.groupCode] && (
-                <div id={`checklist-group-${group.groupCode}`} className="p-2 space-y-1 bg-white">
+                <div id={`checklist-group-${group.groupCode}`} className="p-2 space-y-1 bg-[var(--bg)]">
                   {filteredItems.map(item => {
                     const isChecked = checkedItemIds.includes(item.itemCode);
                     return (
@@ -139,7 +139,7 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
                         className={`flex w-full text-left items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-300 group focus-visible:ring-2 focus-visible:ring-inset ${
                           isChecked 
                             ? 'bg-[var(--surface)] border-transparent opacity-70 hover:opacity-100 grayscale hover:grayscale-0' 
-                            : 'bg-white border-transparent hover:border-[var(--line)] hover:bg-[var(--bg)]'
+                            : 'bg-[var(--surface)] border-transparent hover:border-[var(--line)] hover:bg-[var(--bg)]'
                         }`}
                         onClick={() => toggleItem(item.itemCode)}
                         role="checkbox"
@@ -149,7 +149,7 @@ export function ChecklistBoard({ groups, compact = false }: ChecklistBoardProps)
                            <div className={`w-5 h-5 rounded border shadow-sm transition-all duration-300 flex items-center justify-center ${
                              isChecked 
                                ? 'bg-[var(--accent-primary)] border-[var(--accent-primary)]' 
-                               : 'border-[var(--line)] bg-white group-hover:border-[var(--accent-primary)]'
+                               : 'border-[var(--line)] bg-[var(--surface)] group-hover:border-[var(--accent-primary)]'
                            }`}>
                              {isChecked && <CheckCircle2 className="w-4 h-4 text-white animate-in zoom-in duration-200" />}
                            </div>

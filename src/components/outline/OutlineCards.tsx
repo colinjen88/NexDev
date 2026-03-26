@@ -27,7 +27,7 @@ export function OutlineCards({ sections }: OutlineCardsProps) {
         return (
           <div 
             key={section.sectionSlug} 
-            className="group bg-white border-l-4 border-l-[var(--accent-warm)] border-[var(--line)] border p-6 md:p-8 rounded-r-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
+            className="group bg-[var(--surface)] border-l-4 border-l-[var(--accent-warm)] border-[var(--line)] border p-6 md:p-8 rounded-r-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
             id={`outline-${section.sectionSlug}`}
           >
               <div className="flex justify-between items-start mb-3">

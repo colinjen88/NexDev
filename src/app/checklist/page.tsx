@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import React from 'react';
 import { getChecklistGroups } from '@/lib/content/checklist-loader';
 import { ChecklistBoard } from '@/components/checklist/ChecklistBoard';
+
+export const metadata: Metadata = {
+  title: '實作清單 | 學習型知識工作台',
+  description: '將知識轉化為行動，確保專案每個環節都符合最佳實踐的互動式檢查清單。',
+};
 
 export default async function ChecklistPage() {
   const checklistGroups = await getChecklistGroups();

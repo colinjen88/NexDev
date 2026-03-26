@@ -14,6 +14,7 @@ export interface GuideSection {
   prevSection: string | null;
   nextSection: string | null;
   relatedChecklistGroupCodes: string[];
+  relatedAiGuideSlugs: string[];
 }
 
 export interface OutlineSection {
@@ -35,4 +36,22 @@ export interface ChecklistGroup {
   title: string;
   description?: string;
   items: ChecklistItem[];
+}
+
+export interface AiGuideSection {
+  slug: string;
+  title: string;
+  chapterNumber: number;
+  sortOrder: number;
+  summary: string;
+  estimatedReadMinutes: number;
+  bodyHtml: string;
+  headings: Array<{
+    id: string;
+    level: number;
+    text: string;
+  }>;
+  prevSection: string | null;
+  nextSection: string | null;
+  relatedStandardGuideSlugs: string[];
 }

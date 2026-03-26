@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 import { AppShellProvider } from '@/components/layout/AppShellProvider';
 import { AppShell } from '@/components/layout/AppShell';
 import { getGuideSections } from '@/lib/content/guide-loader';
+import { getAiGuideSections } from '@/lib/content/ai-guide-loader';
 
 export default async function RootLayout({
   children,
@@ -27,11 +28,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const guideSections = await getGuideSections();
+  const aiGuideSections = await getAiGuideSections();
   return (
     <html lang="zh-TW" className={`${jetbrainsMono.variable}`}>
       <body>
         <AppShellProvider>
-          <AppShell guideSections={guideSections}>{children}</AppShell>
+          <AppShell guideSections={guideSections} aiGuideSections={aiGuideSections}>{children}</AppShell>
         </AppShellProvider>
       </body>
     </html>

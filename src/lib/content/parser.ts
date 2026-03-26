@@ -11,7 +11,7 @@ import { visit } from 'unist-util-visit';
 import { toString } from 'mdast-util-to-string';
 import { toMarkdown } from 'mdast-util-to-markdown';
 
-import { GuideSection, OutlineSection, ChecklistGroup, ChecklistItem } from './types';
+import { GuideSection, OutlineSection, ChecklistGroup, ChecklistItem, AiGuideSection } from './types';
 
 // Slug Map configuration
 const GUIDE_SLUG_MAP: Record<string, string> = {
@@ -32,6 +32,14 @@ const GUIDE_SLUG_MAP: Record<string, string> = {
   "15. 常見失誤與反模式": "anti-patterns",
   "16. 交付物、清單與模板": "deliverables-templates",
   "17. 參考資源與延伸閱讀": "reference-resources"
+};
+
+const GUIDE_TO_AI_CROSS_REF_MAP: Record<string, string[]> = {
+  "ai-implementation": ["ai-environment", "prompt-engineering"],
+  "testing-qa": ["dev-workflow"],
+  "performance-seo": ["seo-performance"],
+  "ci-cd-ops": ["deployment"],
+  "mindset": ["engineering-fundamentals"],
 };
 
 const OUTLINE_SLUG_MAP: Record<string, string> = {
@@ -180,7 +188,8 @@ export async function parseGuideSections(): Promise<GuideSection[]> {
       headings,
       prevSection: null,
       nextSection: null,
-      relatedChecklistGroupCodes: []
+      relatedChecklistGroupCodes: [],
+      relatedAiGuideSlugs: GUIDE_TO_AI_CROSS_REF_MAP[slug] || []
     });
     sortOrder++;
   }
@@ -288,3 +297,138 @@ export async function parseChecklistGroups(): Promise<ChecklistGroup[]> {
 
   return groups;
 }
+
+// ===== AI Guide (modern-web-dev-guide-v3) =====
+
+// H2 headings in ai-guide.md that are intentionally not parsed as chapters
+const AI_GUIDE_KNOWN_SKIP = new Set(['目錄']);
+
+const AI_GUIDE_SLUG_MAP: Record<string, string> = {
+  "第 0 章：MVP 全局總覽 — 用 20% 掌握 80% 的核心": "mvp-overview",
+  "前言：為什麼你需要這份指南": "preface",
+  "第一章：軟體工程底蘊 — 你審查 AI 的資本": "engineering-fundamentals",
+  "第二章：標準開發流程 — 敏捷、版控與測試": "dev-workflow",
+  "第三章：AI 驅動開發的環境建置": "ai-environment",
+  "第四章：Prompt 工程實戰 — 讓 AI 寫出你要的程式碼": "prompt-engineering",
+  "第五章：AI 模型與工具全景 — 認識你的團隊成員": "ai-models-tools",
+  "第六章：AI 工作流實戰 — 什麼時機用什麼工具": "ai-workflow",
+  "第七章：AI 生態系關鍵概念 — 理解技術邊界": "ai-ecosystem",
+  "第八章：價值放大 — SEO、效能與無障礙": "seo-performance",
+  "第九章：部署、CI/CD 與監控": "deployment",
+  "第十章：學習路線圖與推薦資源": "learning-roadmap",
+  "結語：你的新角色定義": "conclusion",
+};
+
+const AI_GUIDE_CROSS_REF_MAP: Record<string, string[]> = {
+  "ai-environment": ["ai-implementation"],
+  "prompt-engineering": ["ai-implementation"],
+  "dev-workflow": ["testing-qa"],
+  "seo-performance": ["performance-seo"],
+  "deployment": ["ci-cd-ops"],
+  "engineering-fundamentals": ["mindset"],
+};
+
+const AI_GUIDE_CHAPTER_NUM_MAP: Record<string, number> = {
+  "mvp-overview": 0,
+  "preface": -1,
+  "engineering-fundamentals": 1,
+  "dev-workflow": 2,
+  "ai-environment": 3,
+  "prompt-engineering": 4,
+  "ai-models-tools": 5,
+  "ai-workflow": 6,
+  "ai-ecosystem": 7,
+  "seo-performance": 8,
+  "deployment": 9,
+  "learning-roadmap": 10,
+  "conclusion": -1,
+};
+
+/** Parses ai-guide.md (modern-web-dev-guide-v3) */
+export async function parseAiGuideSections(): Promise<AiGuideSection[]> {
+  const filePath = path.join(process.cwd(), 'content', 'ai-guide.md');
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const tree = getProcessor().parse(content);
+
+  const sections: any[] = [];
+  let currentSection: any = null;
+
+  tree.children.forEach((node: any) => {
+    if (node.type === 'heading' && node.depth === 2) {
+      const title = toString(node).trim();
+      // Keep sections that match our slug map
+      if (AI_GUIDE_SLUG_MAP[title]) {
+        currentSection = { title, nodes: [] };
+        sections.push(currentSection);
+      } else {
+        if (!AI_GUIDE_KNOWN_SKIP.has(title)) {
+          console.warn(`[ai-guide] H2 not in AI_GUIDE_SLUG_MAP (skipped): "${title}"`);
+        }
+        currentSection = null;
+      }
+    } else if (currentSection) {
+      currentSection.nodes.push(node);
+    }
+  });
+
+  const aiGuideSections: AiGuideSection[] = [];
+  let sortOrder = 1;
+
+  for (let i = 0; i < sections.length; i++) {
+    const sec = sections[i];
+    const slug = AI_GUIDE_SLUG_MAP[sec.title] || `ai-section-${sortOrder}`;
+    const chapterNumber = AI_GUIDE_CHAPTER_NUM_MAP[slug] ?? -1;
+
+    // Estimate reading time
+    const mdString = sec.nodes.map((n: any) => toString(n)).join('\n');
+    const wordCount = mdString.replace(/[^\u4e00-\u9fa5]/g, '').length;
+    let estimatedReadMinutes = Math.ceil(wordCount / 400);
+    if (estimatedReadMinutes === 0) estimatedReadMinutes = 1;
+
+    // Generate HTML
+    const htmlAst = await getHtmlProcessor().run({ type: 'root', children: sec.nodes });
+    const bodyHtml = getHtmlProcessor().stringify(htmlAst as any);
+
+    // Extract H3 headings for TOC via rehype (same as guide parser)
+    const rehypeAst = await unified().use(remarkParse).use(remarkRehype).use(rehypeSlug).run({ type: 'root', children: sec.nodes });
+    const headings: Array<{ id: string; level: number; text: string }> = [];
+    visit(rehypeAst, 'element', (node: any) => {
+      if (node.tagName === 'h3') {
+        const text = toString(node);
+        const id = node.properties.id as string;
+        headings.push({ id, level: 3, text });
+      }
+    });
+
+    // Summary from first paragraph
+    const firstP = sec.nodes.find((n: any) => n.type === 'paragraph');
+    const summary = firstP ? toString(firstP) : sec.title;
+
+    // Cross-references
+    const relatedStandardGuideSlugs = AI_GUIDE_CROSS_REF_MAP[slug] || [];
+
+    aiGuideSections.push({
+      slug,
+      title: sec.title,
+      chapterNumber,
+      sortOrder,
+      summary,
+      estimatedReadMinutes,
+      bodyHtml: String(bodyHtml),
+      headings,
+      prevSection: null,
+      nextSection: null,
+      relatedStandardGuideSlugs,
+    });
+    sortOrder++;
+  }
+
+  // Link prev/next
+  for (let i = 0; i < aiGuideSections.length; i++) {
+    if (i > 0) aiGuideSections[i].prevSection = aiGuideSections[i - 1].slug;
+    if (i < aiGuideSections.length - 1) aiGuideSections[i].nextSection = aiGuideSections[i + 1].slug;
+  }
+
+  return aiGuideSections;
+}
+

@@ -1,10 +1,11 @@
 import React from 'react';
-import { BookOpen, TextSelect, Zap, LayoutPanelLeft } from 'lucide-react';
+import { BookOpen, TextSelect, Zap, LayoutPanelLeft, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 export function ModeCards() {
   const modes = [
     { icon: BookOpen, title: '完整指南', desc: '深度閱讀，掌握底層邏輯與系統思考。', href: '/guide', color: 'text-[var(--accent-primary)]', bg: 'bg-[var(--accent-primary)]/10' },
+    { icon: Sparkles, title: 'AI 開發指南', desc: '用 AI 加速開發，掌握 Prompt、工具鏈與模型選型。', href: '/ai-guide', color: 'text-[var(--accent-info)]', bg: 'bg-[var(--accent-info)]/10' },
     { icon: Zap, title: '速讀大綱', desc: '3 分鐘抓取重點，適合碎片時間複習。', href: '/outline', color: 'text-[var(--accent-warm)]', bg: 'bg-[var(--accent-warm)]/10' },
     { icon: LayoutPanelLeft, title: '對照實作', desc: '左看教學右打勾，最高效的實作體驗。', href: '/checklist', color: 'text-[var(--text)]', bg: 'bg-[var(--text)]/10' }
   ];
@@ -15,7 +16,7 @@ export function ModeCards() {
         <TextSelect className="w-5 h-5 text-[var(--accent-warm)]" />
         <h2 className="text-lg font-serif font-bold text-[var(--text)]">學習模式探索</h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {modes.map((mode, i) => (
           <Link href={mode.href} key={i} className="block group bg-[var(--surface)] border border-[var(--line)] rounded-xl p-6 hover:border-[var(--accent-primary)]/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-start cursor-pointer">
             <div className={`p-3 rounded-xl mb-4 ${mode.bg} ${mode.color}`}>

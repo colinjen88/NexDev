@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
 import React from 'react';
 import { getOutlineSections } from '@/lib/content/outline-loader';
 import { OutlineCards } from '@/components/outline/OutlineCards';
 import { OutlineFlowBar } from '@/components/outline/OutlineFlowBar';
 import { Zap } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: '速讀大綱 | 學習型知識工作台',
+  description: '濃縮精華，3 分鐘掌握核心觀念，適合碎片時間複習。',
+};
 
 export default async function OutlinePage() {
   const outlineSections = await getOutlineSections();
