@@ -17,7 +17,7 @@ import { GuideSection, OutlineSection, ChecklistGroup, ChecklistItem, AiGuideSec
 const GUIDE_SLUG_MAP: Record<string, string> = {
   "1. 先建立正確觀念": "mindset",
   "2. 網站開發的標準流程總覽": "workflow-overview",
-  "3. 第 0 階段：問題定義與需求發現": "problem-definition",
+  "0. 第 0 階段：問題定義與需求發現": "problem-definition",
   "4. 第 1 階段：MVP 切分與範圍控制": "mvp-scope",
   "5. 第 2 階段：資訊架構、內容與 UX/UI": "ux-ui-architecture",
   "6. 第 3 階段：技術策略與架構設計": "tech-strategy-architecture",
@@ -116,7 +116,7 @@ export async function parseGuideSections(): Promise<GuideSection[]> {
   tree.children.forEach((node: any) => {
     if (node.type === 'heading' && node.depth === 2) {
       const title = toString(node).trim();
-      // Only keep numbered headings
+      // Only keep numbered headings (e.g. 1. 2. 0.)
       if (/^\d+\./.test(title)) {
         currentSection = {
           title,
@@ -133,11 +133,14 @@ export async function parseGuideSections(): Promise<GuideSection[]> {
 
   const guideSections: GuideSection[] = [];
   
-  let sortOrder = 1;
   for (let i = 0; i < sections.length; i++) {
     const sec = sections[i];
-    const slug = GUIDE_SLUG_MAP[sec.title] || `section-${sortOrder}`;
+    const slug = GUIDE_SLUG_MAP[sec.title] || `section-${i + 1}`;
     
+    // Extract sort order/number from the title if available
+    const numMatch = sec.title.match(/^(\d+)\./);
+    const itemSortOrder = numMatch ? parseInt(numMatch[1], 10) : sortOrder;
+
     // Extract Phase Code roughly
     const phaseMatch = sec.title.match(/第 (\d+) 階段/);
     const phaseCode = phaseMatch ? parseInt(phaseMatch[1], 10) : -1;
@@ -182,7 +185,7 @@ export async function parseGuideSections(): Promise<GuideSection[]> {
       slug,
       title: sec.title.replace(/^\d+\.\s*/, ''), // removes the number prefix
       phaseCode,
-      sortOrder,
+      sortOrder: itemSortOrder,
       summary,
       estimatedReadMinutes,
       bodyHtml: String(bodyHtml),
@@ -192,7 +195,6 @@ export async function parseGuideSections(): Promise<GuideSection[]> {
       relatedChecklistGroupCodes: [],
       relatedAiGuideSlugs: GUIDE_TO_AI_CROSS_REF_MAP[slug] || []
     });
-    sortOrder++;
   }
 
   // Link previous and next
